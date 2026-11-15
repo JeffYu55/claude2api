@@ -10,3 +10,6 @@ sessionKey.txt
 
 # 下载参考的外部开源项目
 /协议/
+# Python
+__pycache__/
+*.pyc
