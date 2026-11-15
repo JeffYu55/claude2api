@@ -1,0 +1,10 @@
+proxy: ""                    # 出口代理
+web_host: 0.0.0.0          # 服务监听地址
+web_uc_host: localhost       # Artifacts 沙箱 Host 这里反代要两个域名，和主域名不同
+admin_password: ""           # 管理密码；留空则首次启动自动生成随机密码并写回本文件
+status_check_seconds: 21600  # 账号巡检间隔，最小 21600
+retry_count: 0               # 换号重试次数，取值 0-8
+delete_chat: true            # 请求完成后删除上游会话
+max_history_length: 12000    # 超长上下文转附件的阈值，小于 1000 会回落默认值
+remove_invalid_account: false # 自动移除会话失效的账号
+detailed_api_log: false      # 记录完整 API 请求与输出；包含对话原文，按需开启
