@@ -19,7 +19,7 @@
 Docker Compose 一键部署
 
 ```bash
-git clone https://github.com/basketikun/claude2api.git
+git clone https://github.com/JeffYu55/claude2api.git
 cd claude2api
 cp config.example.yaml config.yaml
 docker compose up -d
@@ -297,7 +297,7 @@ go test ./internal/adapter -run SDK -v
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=basketikun/claude2api&type=Date)](https://www.star-history.com/#basketikun/claude2api&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=JeffYu55/claude2api&type=Date)](https://www.star-history.com/#JeffYu55/claude2api&Date)
 
 ## 社区支持
 

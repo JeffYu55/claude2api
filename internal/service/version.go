@@ -37,7 +37,7 @@ func LatestVersion() (string, error) {
 }
 
 func fetchLatestVersion() (string, error) {
-	response, err := versionClient.Get("https://raw.githubusercontent.com/basketikun/claude2api/main/VERSION")
+	response, err := versionClient.Get("https://raw.githubusercontent.com/JeffYu55/claude2api/main/VERSION")
 	if err != nil {
 		return "", err
 	}
