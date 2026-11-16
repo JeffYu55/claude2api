@@ -59,3 +59,19 @@ func TestUpdateIgnoresEmptyPassword(t *testing.T) {
 		t.Fatalf("管理口令未更新，得到 %q", got.AdminPassword)
 	}
 }
+
+func TestSessionDaysClamp(t *testing.T) {
+	resetForTest(t)
+	if got := Update(map[string]any{"session_days": 0}); got.SessionDays != DefaultSessionDays {
+		t.Fatalf("0 应回落默认 %d，得到 %d", DefaultSessionDays, got.SessionDays)
+	}
+	if got := Update(map[string]any{"session_days": -5}); got.SessionDays != DefaultSessionDays {
+		t.Fatalf("负数应回落默认 %d，得到 %d", DefaultSessionDays, got.SessionDays)
+	}
+	if got := Update(map[string]any{"session_days": 9999}); got.SessionDays != MaxSessionDays {
+		t.Fatalf("超上限应钳到 %d，得到 %d", MaxSessionDays, got.SessionDays)
+	}
+	if got := Update(map[string]any{"session_days": 7}); got.SessionDays != 7 {
+		t.Fatalf("合法值应保留，得到 %d", got.SessionDays)
+	}
+}

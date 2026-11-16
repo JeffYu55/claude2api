@@ -23,6 +23,10 @@ const (
 	MinMaxChatHistoryLength = 1000
 	// MaxRetryCount 是换号重试次数上限。
 	MaxRetryCount = 8
+	// DefaultSessionDays 是登录 Cookie 的默认有效天数。
+	DefaultSessionDays = 30
+	// MaxSessionDays 是登录 Cookie 的有效天数上限。
+	MaxSessionDays = 365
 )
 
 // Settings 是运行时配置。
@@ -32,6 +36,7 @@ type Settings struct {
 	WebPort                    int    `json:"web_port" yaml:"-"`
 	WebUCHost                  string `json:"-" yaml:"web_uc_host"`
 	AdminPassword              string `json:"-" yaml:"admin_password"`
+	SessionDays                int    `json:"session_days" yaml:"session_days"`
 	StatusCheckIntervalSeconds int    `json:"status_check_interval_seconds" yaml:"status_check_seconds"`
 	RetryCount                 int    `json:"retry_count" yaml:"retry_count"`
 	ChatDelete                 bool   `json:"chat_delete" yaml:"delete_chat"`
@@ -66,7 +71,7 @@ func Load() {
 	}
 	configPath = filepath.Join(baseDir, "config.yaml")
 	ensureConfig(configPath)
-	current = Settings{WebHost: "127.0.0.1", WebPort: 8787, WebUCHost: "localhost", StatusCheckIntervalSeconds: MinStatusCheckSeconds, ChatDelete: true, MaxChatHistoryLength: DefaultMaxChatHistoryLength}
+	current = Settings{WebHost: "127.0.0.1", WebPort: 8787, WebUCHost: "localhost", SessionDays: DefaultSessionDays, StatusCheckIntervalSeconds: MinStatusCheckSeconds, ChatDelete: true, MaxChatHistoryLength: DefaultMaxChatHistoryLength}
 	data, _ := os.ReadFile(configPath)
 	_ = yaml.Unmarshal(data, &current)
 	normalize(&current)
@@ -97,6 +102,12 @@ func normalize(s *Settings) {
 	}
 	if s.RetryCount > MaxRetryCount {
 		s.RetryCount = MaxRetryCount
+	}
+	if s.SessionDays <= 0 {
+		s.SessionDays = DefaultSessionDays
+	}
+	if s.SessionDays > MaxSessionDays {
+		s.SessionDays = MaxSessionDays
 	}
 }
 
@@ -178,6 +189,8 @@ func Update(patch map[string]any) Settings {
 			current.ChatDelete = mustBool(v)
 		case "max_chat_history_length":
 			current.MaxChatHistoryLength = mustAtoi(v)
+		case "session_days":
+			current.SessionDays = mustAtoi(v)
 		case "remove_invalid_account":
 			current.RemoveInvalidAccount = mustBool(v)
 		case "detailed_api_log":

@@ -92,6 +92,7 @@ const CONFIG_FIELDS = [
   "proxy",
   "retry_count",
   "max_chat_history_length",
+  "session_days",
   "chat_delete",
   "detailed_api_log",
   "status_check_interval_seconds",
@@ -101,6 +102,7 @@ const CONFIG_FIELDS = [
 const CONFIG_DEFAULTS = {
   retry_count: 0,
   max_chat_history_length: 12000,
+  session_days: 30,
   chat_delete: true,
   detailed_api_log: false,
   status_check_interval_seconds: 21600,

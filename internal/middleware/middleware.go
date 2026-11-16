@@ -57,11 +57,21 @@ func PoolAuth() gin.HandlerFunc {
 	}
 }
 
-// SetAuthCookie 保存登录凭据。
+// sessionMaxAge 返回登录 Cookie 的有效秒数。
+func sessionMaxAge() int {
+	days := config.Get().SessionDays
+	if days <= 0 {
+		days = config.DefaultSessionDays
+	}
+	return days * 86400
+}
+
+// SetAuthCookie 保存登录凭据。有效期为 session_days 天（默认 30），
+// 避免每次访问都要重新输入密码。
 func SetAuthCookie(c *gin.Context, credential string) {
 	secure := c.Request.TLS != nil || c.GetHeader("X-Forwarded-Proto") == "https"
 	c.SetSameSite(http.SameSiteLaxMode)
-	c.SetCookie(AuthCookieName, credential, 86400, "/", "", secure, true)
+	c.SetCookie(AuthCookieName, credential, sessionMaxAge(), "/", "", secure, true)
 }
 
 func ClearAuthCookie(c *gin.Context) {
@@ -74,7 +84,7 @@ func ClearAuthCookie(c *gin.Context) {
 func SetAuthResponseCookie(w http.ResponseWriter, r *http.Request, credential string) {
 	secure := r.TLS != nil || strings.EqualFold(r.Header.Get("X-Forwarded-Proto"), "https")
 	http.SetCookie(w, &http.Cookie{
-		Name: AuthCookieName, Value: credential, Path: "/", MaxAge: 86400,
+		Name: AuthCookieName, Value: credential, Path: "/", MaxAge: sessionMaxAge(),
 		Secure: secure, HttpOnly: true, SameSite: http.SameSiteLaxMode,
 	})
 }

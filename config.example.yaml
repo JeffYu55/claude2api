@@ -2,6 +2,7 @@ proxy: ""                    # 出口代理
 web_host: 0.0.0.0          # 服务监听地址
 web_uc_host: localhost       # Artifacts 沙箱 Host 这里反代要两个域名，和主域名不同
 admin_password: ""           # 管理密码；留空则首次启动自动生成随机密码并写回本文件
+session_days: 30             # 登录 Cookie 有效天数，避免每次访问都要重新输入密码（1-365）
 status_check_seconds: 21600  # 账号巡检间隔，最小 21600
 retry_count: 0               # 换号重试次数，取值 0-8
 delete_chat: true            # 请求完成后删除上游会话
